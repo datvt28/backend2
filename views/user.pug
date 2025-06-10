@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .container
+    h2 Quản lý người dùng
+    table
+      thead
+        tr
+          th Tên đăng nhập
+          th Hành động
+      tbody
+        each user in users
+          tr
+            td= user.username
+            td
+              a(href=`/reset/${user.username}`) Reset mật khẩu
+              a(href=`/remove/${user.username}`, onclick="return confirm('Xóa người dùng này?')") Xóa

@@ -1,45 +1,33 @@
 extends layout
 
 block content
-  if message
-    .alert.alert-warning #{message}
+  .container
+    form(action="/search", method="get", class="search-form")
+      input(type="text", name="q", placeholder="Tìm ghi chú...")
+      button(type="submit") Tìm
 
-  form(action="/submit" method="post" enctype="multipart/form-data" class="mb-4")
-    .mb-3
-      label.form-label(for="note") ✍️ Ghi chú
-      textarea.form-control(name="note" id="note" rows="3" placeholder="Viết ghi chú của bạn ở đây...") 
-    .mb-3
-      label.form-label(for="image") 📷 Ảnh (tùy chọn)
-      input.form-control(type="file" name="image" id="image" accept="image/*")
-    button.btn.btn-primary(type="submit") Thêm ghi chú
+    if message
+      .message= message
 
-  if notes.length === 0
-    p.text-muted Chưa có ghi chú nào. Hãy thêm ghi chú đầu tiên nhé!
-  else
-    .row.row-cols-1.row-cols-md-3.g-4
-      each note, i in notes
-        - const colors = ['#FFCDD2','#F8BBD0','#E1BEE7','#D1C4E9','#BBDEFB','#B2EBF2','#C8E6C9','#DCEDC8','#FFF9C4','#FFECB3'];
-        - const bgColor = colors[i % colors.length];
-        .col
-          .card.note-card.shadow(style=`background-color: ${bgColor}; border-radius: 15px; overflow: hidden; transition: transform 0.3s; cursor: pointer;`)
-            if note.image
-              img.card-img-top(src=note.image alt="Ảnh ghi chú" style="height:180px; object-fit: cover; border-bottom: 3px solid #fff; transition: transform 0.3s;")
-            .card-body
-              p.card-text(style="font-size: 1.1rem; font-weight: 500; color: #333;") #{note.text}
-            .card-footer.text-end.bg-transparent.border-0
-              a.btn.btn-sm.btn-danger(href=`/delete/${note.id}` onclick="return confirm('Bạn có chắc muốn xóa ghi chú này?');") Xóa
+    form(action="/submit", method="post", enctype="multipart/form-data", class="note-form")
+      textarea(name="note", rows="3", placeholder="Viết ghi chú...") 
+      input(type="file", name="image")
+      label
+        input(type="checkbox", name="pinned")
+        | Ghim ghi chú
+      button(type="submit") Thêm ghi chú
 
-    script.
-      // Hover effect cho card và ảnh
-      document.querySelectorAll('.note-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          card.style.transform = 'scale(1.05)';
-          const img = card.querySelector('img');
-          if(img) img.style.transform = 'scale(1.1)';
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'scale(1)';
-          const img = card.querySelector('img');
-          if(img) img.style.transform = 'scale(1)';
-        });
-      });
+    .notes
+      each note in notes
+        .note(class=note.pinned ? 'pinned' : '')
+          if note.image
+            img(src=note.image, alt="Ảnh ghi chú")
+          p= note.text
+          .note-actions
+            a(href=`/edit/${note.id}`) Sửa
+            a(href=`/delete/${note.id}`, onclick="return confirm('Xóa ghi chú này?')") Xóa
+
+    if totalPages > 1
+      .pagination
+        each i in [...Array(totalPages).keys()].map(n => n + 1)
+          a(href=`/?page=${i}`, class=(i === page ? 'active' : ''))= i

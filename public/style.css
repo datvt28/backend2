@@ -1,5 +1,80 @@
 body {
-    font-family: sans-serif;
-    background: #f0f0f0;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-image: url('/images/dsd.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #fff;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    color: #ffcc00;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.note {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid #ffcc00;
+    border-radius: 5px;
+}
+
+.note h3 {
+    margin-top: 0;
+    color: #ffcc00;
+}
+
+.note img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.note .pinned {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.actions a {
+    margin-right: 10px;
+    color: #00ffff;
+    text-decoration: none;
+}
+
+.button {
+    background-color: #ffcc00;
+    padding: 8px 12px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #fff;
 }

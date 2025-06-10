@@ -1,23 +1,12 @@
 extends layout
 
 block content
-  h2.mb-4 Đăng ký
-
-  if message
-    .alert.alert-danger #{message}
-
-  form(action="/register" method="post")
-    .mb-3
-      label.form-label(for="username") Tên đăng nhập
-      input.form-control(type="text" name="username" id="username" required autofocus)
-    .mb-3
-      label.form-label(for="password") Mật khẩu
-      input.form-control(type="password" name="password" id="password" required)
-    .mb-3
-      label.form-label(for="confirmPassword") Xác nhận mật khẩu
-      input.form-control(type="password" name="confirmPassword" id="confirmPassword" required)
-    button.btn.btn-success(type="submit") Đăng ký
-
-  p.mt-3
-    | Đã có tài khoản? 
-    a(href="/login") Đăng nhập ngay
+  .container
+    h2 Đăng ký
+    if message
+      .message= message
+    form(action="/register", method="post")
+      input(type="text", name="username", placeholder="Tên đăng nhập")
+      input(type="password", name="password", placeholder="Mật khẩu")
+      input(type="password", name="confirmPassword", placeholder="Xác nhận mật khẩu")
+      button(type="submit") Đăng ký

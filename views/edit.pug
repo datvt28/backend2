@@ -1,13 +1,11 @@
-doctype html
-html
-  head
-    title= title
-  body
-    h1= title
-    if message
-      p(style="color: red") #{message}
-    form(method="POST", action=`/edit/${note.id}`)
-      label(for="note") Sửa ghi chú:
-      input(type="text", name="note", id="note", value=note.text)
-      button(type="submit") Lưu
-    a(href="/") Quay lại trang chủ
+extends layout
+
+block content
+  .container
+    h2 Sửa ghi chú
+    form(action=`/edit/${note.id}`, method="post")
+      textarea(name="text", rows="3")= note.text
+      label
+        input(type="checkbox", name="pinned", checked=note.pinned)
+        | Ghim ghi chú
+      button(type="submit") Cập nhật
