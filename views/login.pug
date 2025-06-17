@@ -1,23 +1,18 @@
 extends layout
 
 block content
-  .login-page
-    h2 Đăng nhập tài khoản
+  .container
+    h2 🔐 Đăng nhập
 
     if message
-      .alert.alert-error= message
+      .alert.alert-danger
+        i.fa.fa-exclamation-circle(style='margin-right: 8px')
+        | #{message}
 
-    form(action="/login", method="post")
-      .form-group
-        label(for="username") Tên đăng nhập
-        input(type="text", name="username", id="username", placeholder="Nhập tên đăng nhập", required)
+    form(method='post', action='/login')
+      input(type='text', name='username', placeholder='👤 Tên đăng nhập', required)
+      input(type='password', name='password', placeholder='🔒 Mật khẩu', required)
+      button(type='submit') ➡️ Đăng nhập
 
-      .form-group
-        label(for="password") Mật khẩu
-        input(type="password", name="password", id="password", placeholder="Nhập mật khẩu", required)
-
-      button(type="submit") 🔐 Đăng nhập
-
-    p
-      | Chưa có tài khoản?
-      a(href="/register") Đăng ký ngay
+    .link
+      a(href='/register') 📝 Chưa có tài khoản? Đăng ký ngay

@@ -1,30 +1,9 @@
-doctype html
-html(lang="vi")
+html
   head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= title || 'Web Ghi Chú'
-    link(rel="stylesheet", href="/style.css")
-    link(rel="icon", href="/icon.png", type="image/png")
+    title= title
+    link(rel='stylesheet', href='/style.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
   body
-    header
-      .container
-        h1 Web Quản Lý Ghi Chú
-        if username
-          .user-info
-            span Xin chào, #{username}!
-            a(href="/logout") 🚪 Đăng xuất
-            if username === 'admin'
-              a(href="/users") 👤 Quản lý người dùng
-        else
-          .user-info
-            a(href="/login") Đăng nhập
-            a(href="/register") Đăng ký
-
-    main
-      .container
-        block content
-
-    footer
-      .container
-        p © 2025 - Ghi chú cá nhân bởi Đạt
+    block content

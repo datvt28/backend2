@@ -2,11 +2,18 @@ extends layout
 
 block content
   .container
-    h2 Đăng ký
+    h2 📝 Đăng ký tài khoản
+
     if message
-      .message= message
-    form(action="/register", method="post")
-      input(type="text", name="username", placeholder="Tên đăng nhập")
-      input(type="password", name="password", placeholder="Mật khẩu")
-      input(type="password", name="confirmPassword", placeholder="Xác nhận mật khẩu")
-      button(type="submit") Đăng ký
+      .alert.alert-danger
+        i.fa.fa-exclamation-circle(style='margin-right: 8px')
+        | #{message}
+
+    form(method='post', action='/register')
+      input(type='text', name='username', placeholder='👤 Tên đăng nhập', required)
+      input(type='password', name='password', placeholder='🔒 Mật khẩu', required)
+      input(type='password', name='confirmPassword', placeholder='🔁 Xác nhận mật khẩu', required)
+      button(type='submit') 📝 Đăng ký
+
+    .link
+      a(href='/login') 🔐 Đã có tài khoản? Đăng nhập ngay
