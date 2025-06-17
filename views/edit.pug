@@ -2,10 +2,32 @@ extends layout
 
 block content
   .container
-    h2 Sửa ghi chú
-    form(action=`/edit/${note.id}`, method="post")
-      textarea(name="text", rows="3")= note.text
+    form(action="/search", method="get", class="search-form")
+      input(type="text", name="q", placeholder="Tìm ghi chú...")
+      button(type="submit") Tìm
+
+    if message
+      .message= message
+
+    form(action="/submit", method="post", enctype="multipart/form-data", class="note-form")
+      textarea(name="note", rows="3", placeholder="Viết ghi chú...") 
+      input(type="file", name="image")
       label
-        input(type="checkbox", name="pinned", checked=note.pinned)
+        input(type="checkbox", name="pinned")
         | Ghim ghi chú
-      button(type="submit") Cập nhật
+      button(type="submit") Thêm ghi chú
+
+    .notes
+      each note in notes
+        .note(class=note.pinned ? 'pinned' : '')
+          if note.image
+            img(src=note.image, alt="Ảnh ghi chú")
+          p= note.text
+          .note-actions
+            a(href=`/edit/${note.id}`) Sửa
+            a(href=`/delete/${note.id}`, onclick="return confirm('Xóa ghi chú này?')") Xóa
+
+    if totalPages > 1
+      .pagination
+        each i in [...Array(totalPages).keys()].map(n => n + 1)
+          a(href=`/?page=${i}`, class=(i === page ? 'active' : ''))= i

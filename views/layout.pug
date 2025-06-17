@@ -3,8 +3,8 @@ html(lang="vi")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= title
-    link(rel="stylesheet", href="/styles.css")
+    title= title || 'Web Ghi Chú'
+    link(rel="stylesheet", href="/style.css")
     link(rel="icon", href="/icon.png", type="image/png")
   body
     header
@@ -13,13 +13,18 @@ html(lang="vi")
         if username
           .user-info
             span Xin chào, #{username}!
-            a(href="/logout") Đăng xuất
+            a(href="/logout") 🚪 Đăng xuất
+            if username === 'admin'
+              a(href="/users") 👤 Quản lý người dùng
         else
           .user-info
             a(href="/login") Đăng nhập
             a(href="/register") Đăng ký
+
     main
-      block content
+      .container
+        block content
+
     footer
       .container
         p © 2025 - Ghi chú cá nhân bởi Đạt
