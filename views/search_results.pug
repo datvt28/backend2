@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  header.navbar
+    h1 🔍 Kết quả tìm kiếm cho "#{q}"
+    a.button(href="/") Quay lại
+
+  .container
+    if notes.length === 0
+      .alert.alert-info Không tìm thấy ghi chú nào.
+    else
+      .notes
+        each note in notes
+          .note(class=note.pinned ? "pinned" : "")
+            if note.image
+              img(src="/uploads/" + note.image, alt="Ảnh")
+            h2= note.title
+            p= note.content
+            .note-footer
+              if note.pinned
+                span 📌 Đã ghim
+              else
+                a.button(href=`/notes/pin/${note.id}`) 📌 Ghim
+              a.button(href=`/notes/edit/${note.id}`) ✏️ Sửa
+              a.button.danger(href=`/notes/delete/${note.id}`) 🗑️ Xoá
