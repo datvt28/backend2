@@ -17,7 +17,8 @@ header.navbar {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-h1, h2 {
+h1,
+h2 {
   margin: 10px 0;
 }
 
@@ -35,7 +36,8 @@ h1, h2 {
 }
 
 /* Nút */
-button, .button {
+button,
+.button {
   background-color: #3f51b5;
   color: #fff;
   border: none;
@@ -49,7 +51,8 @@ button, .button {
   transition: background-color 0.3s ease;
 }
 
-button:hover, .button:hover {
+button:hover,
+.button:hover {
   background-color: #303f9f;
 }
 
@@ -62,7 +65,8 @@ button:hover, .button:hover {
 }
 
 /* Input và textarea */
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -82,12 +86,12 @@ textarea {
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 }
 
 .note:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .note img {
@@ -169,7 +173,7 @@ textarea {
   height: 80px;
   border-radius: 50%;
   margin-bottom: 15px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .auth-container h2 {
@@ -220,7 +224,8 @@ table {
   margin-top: 20px;
 }
 
-table th, table td {
+table th,
+table td {
   padding: 12px;
   border: 1px solid #ccc;
   text-align: left;

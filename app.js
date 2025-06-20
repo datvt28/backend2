@@ -1,3 +1,4 @@
+// ==== KHAI BÁO THƯ VIỆN ====
 const fastify = require('fastify')({ logger: true });
 const path = require('path');
 const fs = require('fs');
@@ -6,18 +7,21 @@ const fastifyStatic = require('@fastify/static');
 const fastifyCookie = require('@fastify/cookie');
 const fastifyFormbody = require('@fastify/formbody');
 const fastifyMultipart = require('@fastify/multipart');
-const pump = require('util').promisify(require('stream').pipeline);
+const pump = require('util').promisify(require('stream').pipeline); // xử lý upload file
 const pointOfView = require('@fastify/view');
 
-const notesFile = path.join(__dirname, 'notes.json');
-const usersFile = path.join(__dirname, 'data.json');
-const uploadDir = path.join(__dirname, 'public/uploads');
-const logFile = path.join(__dirname, 'activity.log');
+// ==== ĐỊNH NGHĨA CÁC ĐƯỜNG DẪN FILE ====
+const notesFile = path.join(__dirname, 'notes.json');         // File lưu ghi chú
+const usersFile = path.join(__dirname, 'data.json');          // File lưu user
+const uploadDir = path.join(__dirname, 'public/uploads');     // Thư mục ảnh upload
+const logFile = path.join(__dirname, 'activity.log');         // File log hoạt động
 
+// ==== TẠO THƯ MỤC UPLOAD NẾU CHƯA CÓ ====
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// ==== ĐỌC GHI CHÚ VÀ NGƯỜI DÙNG TỪ FILE JSON ====
 let notes = [];
 try {
     notes = JSON.parse(fs.readFileSync(notesFile, 'utf8'));
@@ -32,20 +36,19 @@ try {
     users = [];
 }
 
+// ==== HÀM LƯU FILE ====
 function saveNotes() {
     fs.writeFileSync(notesFile, JSON.stringify(notes, null, 2));
 }
-
 function saveUsers() {
     fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
 }
-
 function writeLog(msg) {
     const log = `[${new Date().toISOString()}] ${msg}\n`;
     fs.appendFileSync(logFile, log);
 }
 
-// Plugin và cấu hình view + static
+// ==== CÀI ĐẶT PLUGIN ====
 fastify.register(fastifyStatic, {
     root: path.join(__dirname, 'public'),
     prefix: '/',
@@ -58,7 +61,7 @@ fastify.register(pointOfView, {
     root: path.join(__dirname, 'views'),
 });
 
-// Middleware xác thực
+// ==== MIDDLEWARE KIỂM TRA ĐĂNG NHẬP ====
 function checkAuth(req, reply, done) {
     const { token } = req.cookies;
     if (token && users.find(u => u.username === token)) {
@@ -67,6 +70,8 @@ function checkAuth(req, reply, done) {
         reply.redirect('/login');
     }
 }
+
+// Các route không cần đăng nhập
 const publicRoutes = ['/login', '/register'];
 fastify.addHook('preHandler', (req, reply, done) => {
     const path = req.routerPath || req.raw.url.split('?')[0];
@@ -77,7 +82,7 @@ fastify.addHook('preHandler', (req, reply, done) => {
     }
 });
 
-// Trang chính
+// ==== TRANG CHÍNH - HIỂN THỊ GHI CHÚ (CÓ PHÂN TRANG) ====
 fastify.get('/', (req, reply) => {
     const username = req.cookies.token;
     const page = parseInt(req.query.page) || 1;
@@ -98,7 +103,7 @@ fastify.get('/', (req, reply) => {
     });
 });
 
-// Thêm ghi chú
+// ==== THÊM GHI CHÚ (CÓ ẢNH VÀ GHIM) ====
 fastify.post('/submit', async (req, reply) => {
     const username = req.cookies.token;
     const parts = req.parts();
@@ -131,11 +136,10 @@ fastify.post('/submit', async (req, reply) => {
     notes.push({ id: nanoid(), username, text, image: imageFileName, pinned });
     saveNotes();
     writeLog(`${username} thêm ghi chú`);
-
     reply.redirect('/');
 });
 
-// Xoá ghi chú
+// ==== XOÁ GHI CHÚ ====
 fastify.get('/delete/:id', (req, reply) => {
     const username = req.cookies.token;
     const id = req.params.id;
@@ -151,11 +155,10 @@ fastify.get('/delete/:id', (req, reply) => {
         saveNotes();
         writeLog(`${username} xoá ghi chú ${id}`);
     }
-
     reply.redirect('/');
 });
 
-// Trang sửa ghi chú
+// ==== TRANG SỬA GHI CHÚ ====
 fastify.get('/edit/:id', (req, reply) => {
     const username = req.cookies.token;
     const id = req.params.id;
@@ -165,7 +168,7 @@ fastify.get('/edit/:id', (req, reply) => {
     return reply.view('edit', { title: 'Sửa ghi chú', note });
 });
 
-// Cập nhật ghi chú
+// ==== CẬP NHẬT GHI CHÚ ====
 fastify.post('/edit/:id', (req, reply) => {
     const username = req.cookies.token;
     const id = req.params.id;
@@ -178,11 +181,10 @@ fastify.post('/edit/:id', (req, reply) => {
         saveNotes();
         writeLog(`${username} sửa ghi chú ${id}`);
     }
-
     reply.redirect('/');
 });
 
-// Tìm kiếm ghi chú
+// ==== TÌM KIẾM GHI CHÚ ====
 fastify.get('/search', (req, reply) => {
     const username = req.cookies.token;
     const keyword = (req.query.q || '').toLowerCase();
@@ -201,7 +203,7 @@ fastify.get('/search', (req, reply) => {
     });
 });
 
-// Quản lý người dùng (admin)
+// ==== QUẢN LÝ NGƯỜI DÙNG (ADMIN) ====
 fastify.get('/users', (req, reply) => {
     if (req.cookies.token !== 'admin') return reply.redirect('/');
     return reply.view('users', { users });
@@ -230,7 +232,7 @@ fastify.get('/remove/:username', (req, reply) => {
     reply.redirect('/users');
 });
 
-// Đăng nhập
+// ==== ĐĂNG NHẬP / ĐĂNG KÝ / ĐĂNG XUẤT ====
 fastify.get('/login', (req, reply) => {
     reply.view('login', { title: 'Đăng nhập', message: null });
 });
@@ -247,7 +249,6 @@ fastify.post('/login', (req, reply) => {
     }
 });
 
-// Đăng ký
 fastify.get('/register', (req, reply) => {
     reply.view('register', { title: 'Đăng ký', message: null });
 });
@@ -273,13 +274,12 @@ fastify.post('/register', (req, reply) => {
     reply.redirect('/login');
 });
 
-// Đăng xuất
 fastify.get('/logout', (req, reply) => {
     reply.clearCookie('token', { path: '/' });
     reply.redirect('/login');
 });
 
-// Khởi chạy server
+// ==== KHỞI CHẠY SERVER ====
 fastify.listen({ port: 3000 }, err => {
     if (err) {
         fastify.log.error(err);
