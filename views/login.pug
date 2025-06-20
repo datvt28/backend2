@@ -3,7 +3,6 @@ extends layout
 block content
   .auth-container
     img.logo(src='/images/login.png', alt='Đăng nhập')
-
     h2 🔐 Đăng nhập
 
     if message
@@ -12,9 +11,16 @@ block content
         | #{message}
 
     form(method='post', action='/login')
-      input(type='text', name='username', placeholder='👤 Tên đăng nhập', required)
-      input(type='password', name='password', placeholder='🔒 Mật khẩu', required)
+      .form-group
+        i.fas.fa-user
+        input(type='text', name='username', placeholder='Tên đăng nhập', required)
+
+      .form-group
+        i.fas.fa-lock
+        input(type='password', name='password', placeholder='Mật khẩu', required)
+
       button(type='submit') ➡️ Đăng nhập
 
-    .link
-      a(href='/register') 📝 Chưa có tài khoản? Đăng ký ngay
+    .auth-link
+      span Chưa có tài khoản?
+      a(href='/register') 📝 Đăng ký ngay

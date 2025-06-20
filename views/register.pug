@@ -3,7 +3,6 @@ extends layout
 block content
   .auth-container
     img.logo(src='/images/register.png', alt='Đăng ký')
-
     h2 📝 Đăng ký tài khoản
 
     if message
@@ -12,10 +11,20 @@ block content
         | #{message}
 
     form(method='post', action='/register')
-      input(type='text', name='username', placeholder='👤 Tên đăng nhập', required)
-      input(type='password', name='password', placeholder='🔒 Mật khẩu', required)
-      input(type='password', name='confirmPassword', placeholder='🔁 Xác nhận mật khẩu', required)
+      .form-group
+        i.fas.fa-user
+        input(type='text', name='username', placeholder='Tên đăng nhập', required)
+
+      .form-group
+        i.fas.fa-lock
+        input(type='password', name='password', placeholder='Mật khẩu', required)
+
+      .form-group
+        i.fas.fa-rotate
+        input(type='password', name='confirmPassword', placeholder='Xác nhận mật khẩu', required)
+
       button(type='submit') 📝 Đăng ký
 
-    .link
-      a(href='/login') 🔐 Đã có tài khoản? Đăng nhập ngay
+    .auth-link
+      span Đã có tài khoản?
+      a(href='/login') 🔐 Đăng nhập ngay
