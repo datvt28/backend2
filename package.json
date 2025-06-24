@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/caching": "^9.0.3",
     "@fastify/cookie": "^11.0.2",
     "@fastify/flash": "^6.0.3",
     "@fastify/formbody": "^8.0.2",

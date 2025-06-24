@@ -7,34 +7,31 @@ const fastifyStatic = require('@fastify/static');
 const fastifyCookie = require('@fastify/cookie');
 const fastifyFormbody = require('@fastify/formbody');
 const fastifyMultipart = require('@fastify/multipart');
-const pump = require('util').promisify(require('stream').pipeline); // xử lý upload file
+const pump = require('util').promisify(require('stream').pipeline);
 const pointOfView = require('@fastify/view');
+const fastifyCaching = require('@fastify/caching'); // ✅ Plugin cache
 
 // ==== ĐỊNH NGHĨA CÁC ĐƯỜNG DẪN FILE ====
-const notesFile = path.join(__dirname, 'notes.json');         // File lưu ghi chú
-const usersFile = path.join(__dirname, 'data.json');          // File lưu user
-const uploadDir = path.join(__dirname, 'public/uploads');     // Thư mục ảnh upload
-const logFile = path.join(__dirname, 'activity.log');         // File log hoạt động
+const notesFile = path.join(__dirname, 'notes.json');
+const usersFile = path.join(__dirname, 'data.json');
+const uploadDir = path.join(__dirname, 'public/uploads');
+const logFile = path.join(__dirname, 'activity.log');
 
 // ==== TẠO THƯ MỤC UPLOAD NẾU CHƯA CÓ ====
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// ==== ĐỌC GHI CHÚ VÀ NGƯỜI DÙNG TỪ FILE JSON ====
+// ==== ĐỌC GHI CHÚ VÀ NGƯỜI DÙNG ====
 let notes = [];
 try {
     notes = JSON.parse(fs.readFileSync(notesFile, 'utf8'));
-} catch {
-    notes = [];
-}
+} catch { notes = []; }
 
 let users = [];
 try {
     users = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
-} catch {
-    users = [];
-}
+} catch { users = []; }
 
 // ==== HÀM LƯU FILE ====
 function saveNotes() {
@@ -60,6 +57,7 @@ fastify.register(pointOfView, {
     engine: { pug: require('pug') },
     root: path.join(__dirname, 'views'),
 });
+fastify.register(fastifyCaching); // ✅ Đăng ký plugin cache
 
 // ==== MIDDLEWARE KIỂM TRA ĐĂNG NHẬP ====
 function checkAuth(req, reply, done) {
@@ -71,7 +69,7 @@ function checkAuth(req, reply, done) {
     }
 }
 
-// Các route không cần đăng nhập
+// ==== ROUTE KHÔNG CẦN ĐĂNG NHẬP ====
 const publicRoutes = ['/login', '/register'];
 fastify.addHook('preHandler', (req, reply, done) => {
     const path = req.routerPath || req.raw.url.split('?')[0];
@@ -82,7 +80,7 @@ fastify.addHook('preHandler', (req, reply, done) => {
     }
 });
 
-// ==== TRANG CHÍNH - HIỂN THỊ GHI CHÚ (CÓ PHÂN TRANG) ====
+// ==== TRANG CHÍNH (CACHE + PHÂN TRANG) ====
 fastify.get('/', (req, reply) => {
     const username = req.cookies.token;
     const page = parseInt(req.query.page) || 1;
@@ -93,6 +91,8 @@ fastify.get('/', (req, reply) => {
         : notes.filter(n => n.username === username);
     const sortedNotes = [...userNotes].sort((a, b) => b.pinned - a.pinned);
     const paginated = sortedNotes.slice((page - 1) * perPage, page * perPage);
+
+    reply.header('Cache-Control', 'public, max-age=60'); // ✅ Thêm cache
 
     return reply.view('index', {
         title: 'Ghi chú cá nhân',
