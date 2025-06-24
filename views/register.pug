@@ -1,8 +1,60 @@
 extends layout
 
 block content
-  .auth-container
-    img.logo(src='/images/register.png', alt='Đăng ký')
+  style.
+    body {
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .register-wrapper {
+      max-width: 450px;
+      margin: 5rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .register-wrapper h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .register-wrapper input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+    }
+    .register-wrapper input:focus {
+      outline: none;
+      border-color: #fda085;
+      box-shadow: 0 0 5px #fda085;
+    }
+    .register-wrapper button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #f6a265;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .register-wrapper button:hover {
+      background: #f88c42;
+    }
+    .register-wrapper .link {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .alert {
+      margin-bottom: 1rem;
+    }
+
+  .register-wrapper
     h2 📝 Đăng ký tài khoản
 
     if message
@@ -11,20 +63,10 @@ block content
         | #{message}
 
     form(method='post', action='/register')
-      .form-group
-        i.fas.fa-user
-        input(type='text', name='username', placeholder='Tên đăng nhập', required)
-
-      .form-group
-        i.fas.fa-lock
-        input(type='password', name='password', placeholder='Mật khẩu', required)
-
-      .form-group
-        i.fas.fa-rotate
-        input(type='password', name='confirmPassword', placeholder='Xác nhận mật khẩu', required)
-
+      input(type='text', name='username', placeholder='👤 Tên đăng nhập', required)
+      input(type='password', name='password', placeholder='🔒 Mật khẩu', required)
+      input(type='password', name='confirmPassword', placeholder='🔁 Xác nhận mật khẩu', required)
       button(type='submit') 📝 Đăng ký
 
-    .auth-link
-      span Đã có tài khoản?
-      a(href='/login') 🔐 Đăng nhập ngay
+    .link
+      a(href='/login') 🔐 Đã có tài khoản? Đăng nhập ngay

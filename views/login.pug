@@ -1,8 +1,60 @@
 extends layout
 
 block content
-  .auth-container
-    img.logo(src='/images/login.png', alt='Đăng nhập')
+  style.
+    body {
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .login-wrapper {
+      max-width: 400px;
+      margin: 5rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .login-wrapper h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .login-wrapper input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+    }
+    .login-wrapper input:focus {
+      outline: none;
+      border-color: #74ebd5;
+      box-shadow: 0 0 5px #74ebd5;
+    }
+    .login-wrapper button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #74ebd5;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .login-wrapper button:hover {
+      background: #57c1d6;
+    }
+    .login-wrapper .link {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .alert {
+      margin-bottom: 1rem;
+    }
+
+  .login-wrapper
     h2 🔐 Đăng nhập
 
     if message
@@ -11,16 +63,9 @@ block content
         | #{message}
 
     form(method='post', action='/login')
-      .form-group
-        i.fas.fa-user
-        input(type='text', name='username', placeholder='Tên đăng nhập', required)
-
-      .form-group
-        i.fas.fa-lock
-        input(type='password', name='password', placeholder='Mật khẩu', required)
-
+      input(type='text', name='username', placeholder='👤 Tên đăng nhập', required)
+      input(type='password', name='password', placeholder='🔒 Mật khẩu', required)
       button(type='submit') ➡️ Đăng nhập
 
-    .auth-link
-      span Chưa có tài khoản?
-      a(href='/register') 📝 Đăng ký ngay
+    .link
+      a(href='/register') 📝 Chưa có tài khoản? Đăng ký ngay
