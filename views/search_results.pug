@@ -13,13 +13,10 @@ block content
         each note in notes
           .note(class=note.pinned ? "pinned" : "")
             if note.image
-              img(src="/uploads/" + note.image, alt="Ảnh")
-            h2= note.title
-            p= note.content
+              img(src=note.image, alt="Ảnh")
+            p= note.text
             .note-footer
               if note.pinned
                 span 📌 Đã ghim
-              else
-                a.button(href=`/notes/pin/${note.id}`) 📌 Ghim
-              a.button(href=`/notes/edit/${note.id}`) ✏️ Sửa
-              a.button.danger(href=`/notes/delete/${note.id}`) 🗑️ Xoá
+              a.button(href=`/edit/${note._id}`) ✏️ Sửa
+              a.button.danger(href=`/delete/${note._id}` onclick='return confirm("Bạn có chắc muốn xoá?")') 🗑️ Xoá

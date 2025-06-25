@@ -9,7 +9,8 @@ block content
       button(type='submit') Tìm
 
     form.note-form(method='post', action='/submit', enctype='multipart/form-data')
-      textarea(name='note', rows='3', placeholder='📝 Nội dung ghi chú...')
+      input(type='text', name='title', placeholder='📝 Tiêu đề ghi chú...')
+      textarea(name='note', rows='3', placeholder='✍️ Nội dung ghi chú...')
       input(type='file', name='image')
       label.checkbox
         input(type='checkbox', name='pinned')
@@ -24,10 +25,14 @@ block content
         .note(class=note.pinned ? 'pinned' : '')
           if note.image
             img(src=note.image, alt='Ảnh')
+          if username === 'admin'
+            p.nguoitao 👤 Người tạo: #{note.username}
+          if note.title
+            h3= note.title
           p= note.text
           .note-footer
-            a.button(href=`/edit/${note.id}`) ✏️ Sửa
-            a.button.danger(href=`/delete/${note.id}` onclick='return confirm("Bạn có chắc muốn xoá?")') 🗑 Xoá
+            a.button(href=`/edit/${note._id}`) ✏️ Sửa
+            a.button.danger(href=`/delete/${note._id}` onclick='return confirm("Bạn có chắc muốn xoá?")') 🗑 Xoá
 
     .pagination
       if page > 1

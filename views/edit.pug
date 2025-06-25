@@ -4,7 +4,8 @@ block content
   .container
     h2 ✏️ Chỉnh sửa ghi chú
 
-    form(method='post', action=`/edit/${note.id}`)
+    form(method='post', action=`/edit/${note._id}`)
+      input(type='text', name='title', placeholder='📝 Tiêu đề ghi chú...', value=note.title || '')
       textarea(name='text', rows='3')= note.text
       label.checkbox
         input(type='checkbox', name='pinned', checked=note.pinned)
